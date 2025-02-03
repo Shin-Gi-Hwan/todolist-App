@@ -1,19 +1,15 @@
 package com.example.todolist.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
-@Data
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class TodoForm {
+public class TodoRequestDto {
+    private String username;
     private String todo;
-    private String name;
-    private String password;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }
