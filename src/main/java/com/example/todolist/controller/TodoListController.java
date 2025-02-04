@@ -1,17 +1,51 @@
 package com.example.todolist.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.todolist.dto.TodoRequestDto;
+import com.example.todolist.dto.TodoResponseDto;
+import com.example.todolist.service.TodoListService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/todo")
 public class TodoListController {
-    @PostMapping("/new")
-    public String createTodoList(TodoForm form) {
-        // DTO 를 엔티티로 변환
+    private final TodoListService todoListService;
 
-        // 리파지터리로 엔티티를 DB에 저장
+    public TodoListController(TodoListService todoListService) {
+        this.todoListService = todoListService;
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<TodoResponseDto> createTodoList(@RequestBody TodoRequestDto dto) {
+        return new ResponseEntity<>(todoListService.saveTodo(dto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<TodoResponseDto>> findAllTodoList(
+            @RequestParam(required = false) String modifiedAt,
+            @RequestParam(required = false) String username
+    ) {
+        List<TodoResponseDto> todoList = todoListService.findAll(modifiedAt, username);
+        return new ResponseEntity<>(todoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TodoResponseDto> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(todoListService.findById(id), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TodoResponseDto> update(@PathVariable Long id, @RequestBody TodoRequestDto dto) {
+        return new ResponseEntity<>(todoListService.update(id, dto.getTodo(), dto.getUsername(), dto.getPassword()), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        todoListService.delete(id);
+        return ResponseEntity.noContent().build(); // 204 반환
     }
 
 }
