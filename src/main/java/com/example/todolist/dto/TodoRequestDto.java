@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class TodoRequestDto {
     private String username;
     private String todo;
+    private String password;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }
