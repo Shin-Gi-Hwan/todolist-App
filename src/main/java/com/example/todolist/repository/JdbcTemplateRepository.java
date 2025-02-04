@@ -74,12 +74,23 @@ public class JdbcTemplateRepository implements TodoRepository {
     }
 
     @Override
-    public void delete(Long id) {
-        String sql = "DELETE FROM TODO WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, id);
+    public void delete(Long id, String password) {
+        // 비밀번호가 일치하는지 먼저 확인
+        String sqlCheckPassword = "SELECT COUNT(*) FROM TODO WHERE id = ? AND password = ?";
+        int count = jdbcTemplate.queryForObject(sqlCheckPassword, Integer.class, id, password);
 
+        // 비밀번호가 일치하지 않으면 예외 발생
+        if (count == 0) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Password is incorrect");
+        }
+
+        // 비밀번호가 맞으면 해당 Todo 삭제
+        String sqlDelete = "DELETE FROM TODO WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sqlDelete, id);
+
+        // 삭제된 항목이 없으면 Not Found 예외 발생
         if (rowsAffected == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found");
         }
     }
 

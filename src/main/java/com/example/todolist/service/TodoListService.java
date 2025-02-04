@@ -55,7 +55,7 @@ public class TodoListService {
         return new TodoResponseDto(optional.get());
     }
 
-    public void delete(Long id) {
-        jdbcTemplateRepository.delete(id);
+    public void delete(Long id, String password) {
+        jdbcTemplateRepository.delete(id, password);
     }
 }

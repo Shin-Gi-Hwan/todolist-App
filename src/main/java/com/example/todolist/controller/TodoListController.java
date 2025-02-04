@@ -43,8 +43,8 @@ public class TodoListController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        todoListService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody TodoRequestDto dto) {
+        todoListService.delete(id, dto.getPassword());
         return ResponseEntity.noContent().build(); // 204 반환
     }
 
