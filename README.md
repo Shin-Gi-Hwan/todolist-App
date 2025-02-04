@@ -6,7 +6,7 @@
 ---
 **ERD 작성**
 
-![image](https://github.com/user-attachments/assets/8692f4ea-c9ad-4af4-b377-90b30b37faaf)
+![image](https://github.com/user-attachments/assets/a34c80e8-6f90-4b50-9ef4-3ac943e57b42)
 ---
 ### 요구사항
 ### Lv 0. API 명세 및 ERD 작성   `필수`
